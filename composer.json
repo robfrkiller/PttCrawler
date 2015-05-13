@@ -1,0 +1,8 @@
+{
+	"require": {
+		"sunra/php-simple-html-dom-parser": "1.5.0",
+		"phpmailer/phpmailer": ">=5.2.9",
+		"guzzlehttp/guzzle": ">=5.2.0"
+	}
+}
+
