@@ -94,7 +94,8 @@ if ($table !== '') {
 				}'
 		]);
 		if ($req->getStatusCode() === 200) {
-			$res = $req->json();
+			$body = $req->getBody();
+			$res = json_decode($body->read(9999), 1);
 			if ($res['active'] === true) {
 				echo $push['name'] . ' push done.' . PHP_EOL;
 			}
