@@ -62,7 +62,9 @@ if ($table !== '') {
 	$mail->From = 'bot@skynet.com';
 	$mail->FromName = '全自動機器人';
 	$mail->CharSet = 'UTF-8';
-	$mail->addAddress($config['notify']['email']);
+	foreach ($config['notify']['email'] as $email) {
+		$mail->addAddress($email);
+	}
 	$mail->setLanguage('zh');
 
 	$mail->isHTML(true);

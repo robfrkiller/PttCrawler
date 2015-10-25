@@ -14,7 +14,9 @@ return [
 
 	//通知資訊
 	'notify' => [
-		'email' => 'YOUREMAIL',
+		'email' => [
+			'YOUREMAIL',
+		],
 		'pushbullet' => [
 			'device'	=> [
 				[
