@@ -6,6 +6,7 @@ return [
 		[
 			'name'		=> '遊戲買賣',
 			'link'		=> 'https://www.ptt.cc/bbs/Gamesale/index.html',
+			'push'		=> 99,
 			'keyword'	=> [
 				'測試',
 			]

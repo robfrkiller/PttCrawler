@@ -30,6 +30,30 @@ foreach ($config['urls'] as $url) {
 			$block_list[] = $href;
 		}
 	}
+
+	$findpush = $html->find('.nrec span');
+	foreach ($findpush as $e) {
+		$push = $e->innertext;
+		if (isset($push{0})) {
+			if (isset($push{1}) and $push{1} === 'X') {
+				$push = -100;
+			} elseif ($push{0} === 'X') {
+				$push = $push{1} * -10;
+			} elseif ($push === '爆') {
+				$push = 100;
+			}
+		}
+		$push = $push + 0;
+		$alink = $e->parent()->next_sibling()->next_sibling()->first_child();
+		if ($push >= $url['push'] and ! in_array($alink->href, $block_list)) {
+			$list[] = [
+				'href'	=> $alink->href,
+				'title'	=> '推數: ' . $push . ' ' . $alink->innertext,
+			];
+			$block_list[] = $alink->href;
+		}
+	}
+
 	if (isset($list[0])) {
 		print_r($list);
 		$table .= '<table border="1">
