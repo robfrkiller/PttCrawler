@@ -31,26 +31,52 @@ foreach ($config['urls'] as $url) {
 		}
 	}
 
-	$findpush = $html->find('.nrec span');
-	foreach ($findpush as $e) {
-		$push = $e->innertext;
-		if (isset($push{0})) {
-			if (isset($push{1}) and $push{1} === 'X') {
-				$push = -100;
-			} elseif ($push{0} === 'X') {
-				$push = $push{1} * -10;
-			} elseif ($push === '爆') {
-				$push = 100;
+	if ($url['newPage'] > 0) {
+		$allPage = [
+			'index'	=> $html,
+		];
+
+		if ($url['newPage'] > 1) {
+			$newestPage = $html->find('a.wide', 1)->href;
+			preg_match('/\/index(\d{1,6})\.html/', $newestPage, $match);
+			if (isset($match[1])) {
+				$totalPage = $match[1] + 1;
+				for ($i = 1; $i < $url['newPage']; ++$i) {
+					$allPage[] = str_replace('index.html', 'index' . ($totalPage - $i) . '.html', $url['link']);
+				}
 			}
 		}
-		$push = $push + 0;
-		$alink = $e->parent()->next_sibling()->next_sibling()->first_child();
-		if ($push >= $url['push'] and ! in_array($alink->href, $block_list)) {
-			$list[] = [
-				'href'	=> $alink->href,
-				'title'	=> '推數: ' . $push . ' ' . $alink->innertext,
-			];
-			$block_list[] = $alink->href;
+
+		foreach ($allPage as $key => $val) {
+			if ($key === 'index') {
+				$newestHtml = $val;
+			} else {
+				sleep(5);
+				$newestHtml = HtmlDomParser::file_get_html($val);
+			}
+
+			$findpush = $newestHtml->find('.nrec span');
+			foreach ($findpush as $e) {
+				$push = $e->innertext;
+				if (isset($push{0})) {
+					if (isset($push{1}) and $push{1} === 'X') {
+						$push = -100;
+					} elseif ($push{0} === 'X') {
+						$push = $push{1} * -10;
+					} elseif ($push === '爆') {
+						$push = 100;
+					}
+				}
+				$push = $push + 0;
+				$alink = $e->parent()->next_sibling()->next_sibling()->first_child();
+				if ($push >= $url['push'] and ! in_array($alink->href, $block_list)) {
+					$list[] = [
+						'href'	=> $alink->href,
+						'title'	=> '推數: ' . $push . ' ' . $alink->innertext,
+					];
+					$block_list[] = $alink->href;
+				}
+			}
 		}
 	}
 
