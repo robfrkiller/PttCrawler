@@ -2,6 +2,8 @@
 $pg_stime = microtime(true);
 include 'vendor/autoload.php';
 $config = require 'config.php';
+$client = new GuzzleHttp\Client();
+
 use Sunra\PhpSimple\HtmlDomParser;
 echo '執行時間：' . date('Y-m-d H:i:s') . PHP_EOL;
 
@@ -15,7 +17,12 @@ if (is_file($config['blocklist_txt'])) {
 
 $table = $bullet = '';
 foreach ($config['urls'] as $url) {
-	$html = HtmlDomParser::file_get_html($url['link']);
+	$res = $client->request('GET', $url['link'], [
+		'headers'        => [
+			'Accept-Encoding' => 'gzip',
+		],
+	]);
+	$html = HtmlDomParser::str_get_html((string) $res->getBody());
 	$findword = $html->find('.title a');
 
 	$list = [];
@@ -52,7 +59,12 @@ foreach ($config['urls'] as $url) {
 				$newestHtml = $val;
 			} else {
 				sleep(5);
-				$newestHtml = HtmlDomParser::file_get_html($val);
+				$res = $client->request('GET', $val, [
+					'headers'        => [
+						'Accept-Encoding' => 'gzip',
+					],
+				]);
+				$newestHtml = HtmlDomParser::str_get_html((string) $res->getBody());
 			}
 
 			$findpush = $newestHtml->find('.nrec span');
