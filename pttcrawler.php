@@ -15,12 +15,22 @@ if (is_file($config['blocklist_txt'])) {
 	$block_list = [];
 }
 
+$cookie = new \GuzzleHttp\Cookie\SetCookie();
+$cookie->setName('over18');
+$cookie->setValue('1');
+$cookie->setDomain('www.ptt.cc');
+
+$jar = new \GuzzleHttp\Cookie\CookieJar();
+$jar->setCookie($cookie);
+
 $table = $bullet = '';
 foreach ($config['urls'] as $url) {
+
 	$res = $client->request('GET', $url['link'], [
 		'headers'        => [
 			'Accept-Encoding' => 'gzip',
 		],
+		'cookies'        => $jar,
 	]);
 	$html = HtmlDomParser::str_get_html((string) $res->getBody());
 	$findword = $html->find('.title a');
@@ -63,6 +73,7 @@ foreach ($config['urls'] as $url) {
 					'headers'        => [
 						'Accept-Encoding' => 'gzip',
 					],
+					'cookies'        => $jar,
 				]);
 				$newestHtml = HtmlDomParser::str_get_html((string) $res->getBody());
 			}
