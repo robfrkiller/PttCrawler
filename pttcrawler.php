@@ -95,7 +95,7 @@ foreach ($config['urls'] as $url) {
 				if ($push >= $url['push'] and ! in_array($alink->href, $block_list)) {
 					$list[] = [
 						'href'	=> $alink->href,
-						'title'	=> '推數: ' . $push . ' ' . $alink->innertext,
+						'title'	=> $push . ' 推: ' . $alink->innertext,
 					];
 					$block_list[] = $alink->href;
 				}
