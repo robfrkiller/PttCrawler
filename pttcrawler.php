@@ -92,7 +92,7 @@ foreach ($config['urls'] as $url) {
 				}
 				$push = $push + 0;
 				$alink = $e->parent()->next_sibling()->next_sibling()->first_child();
-				if ($push >= $url['push'] and ! in_array($alink->href, $block_list)) {
+				if ($push >= $url['push'] and isset($alink->href) and ! in_array($alink->href, $block_list)) {
 					$list[] = [
 						'href'	=> $alink->href,
 						'title'	=> $push . ' 推: ' . $alink->innertext,
