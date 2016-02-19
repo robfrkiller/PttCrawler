@@ -32,6 +32,10 @@ foreach ($config['urls'] as $url) {
         ],
         'cookies'        => $jar,
     ]);
+    if ($res->getStatusCode() !== 200) {
+        echo $res->getStatusCode() . ' 失敗: ' . $url['name'] . $url['link'] . PHP_EOL;
+        continue;
+    }
     $html = HtmlDomParser::str_get_html((string) $res->getBody());
     $findword = $html->find('.title a');
 
@@ -75,6 +79,10 @@ foreach ($config['urls'] as $url) {
                     ],
                     'cookies'        => $jar,
                 ]);
+                if ($res->getStatusCode() !== 200) {
+                    echo $res->getStatusCode() . ' 失敗: ' . $url['name'] . $val . PHP_EOL;
+                    continue;
+                }
                 $newestHtml = HtmlDomParser::str_get_html((string) $res->getBody());
             }
 
