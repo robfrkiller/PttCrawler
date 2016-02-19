@@ -43,7 +43,7 @@ foreach ($config['urls'] as $url) {
     foreach ($findword as $e) {
         $alink = strtolower(trim($e->innertext));
         $href = $e->getAttribute('href');
-        if (!in_array($href, $block_list) and strposa($alink, $url['keyword'])) {
+        if ( ! in_array($href, $block_list, 1) and strposa($alink, $url['keyword'])) {
             $list[] = [
                 'href'  => $href,
                 'title' => $alink
@@ -100,7 +100,7 @@ foreach ($config['urls'] as $url) {
                 }
                 $push = $push + 0;
                 $alink = $e->parent()->next_sibling()->next_sibling()->first_child();
-                if ($push >= $url['push'] and isset($alink->href) and ! in_array($alink->href, $block_list)) {
+                if ($push >= $url['push'] and isset($alink->href) and ! in_array($alink->href, $block_list, 1)) {
                     $list[] = [
                         'href'  => $alink->href,
                         'title' => $push . ' 推: ' . $alink->innertext,
