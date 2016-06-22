@@ -29,6 +29,7 @@ foreach ($config['urls'] as $url) {
     $res = $client->request('GET', $url['link'], [
         'headers'        => [
             'Accept-Encoding' => 'gzip',
+            'User-Agent'      => $config['ua'],
         ],
         'cookies'        => $jar,
     ]);
@@ -76,6 +77,7 @@ foreach ($config['urls'] as $url) {
                 $res = $client->request('GET', $val, [
                     'headers'        => [
                         'Accept-Encoding' => 'gzip',
+                        'User-Agent'      => $config['ua'],
                     ],
                     'cookies'        => $jar,
                 ]);
@@ -168,7 +170,8 @@ if ($table !== '') {
         $req = $client->post('https://api.pushbullet.com/v2/pushes', [
             'headers'   => [
                 'Authorization' => $config['notify']['pushbullet']['authorization'],
-                'Content-type'  => 'application/json'
+                'Content-type'  => 'application/json',
+                'User-Agent'    => $config['ua'],
             ],
             'body'      => '
                 {
