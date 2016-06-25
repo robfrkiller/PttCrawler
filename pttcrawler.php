@@ -27,11 +27,13 @@ $table = $bullet = '';
 foreach ($config['urls'] as $url) {
 
     $res = $client->request('GET', $url['link'], [
-        'headers'        => [
+        'headers'       => [
             'Accept-Encoding' => 'gzip',
             'User-Agent'      => $config['ua'],
         ],
-        'cookies'        => $jar,
+        'cookies'       => $jar,
+        'proxy'         => 'socks5://127.0.0.1:9050',
+        'timeout'       => 15,
     ]);
     if ($res->getStatusCode() !== 200) {
         echo $res->getStatusCode() . ' 失敗: ' . $url['name'] . $url['link'] . PHP_EOL;
@@ -75,11 +77,13 @@ foreach ($config['urls'] as $url) {
             } else {
                 sleep(5);
                 $res = $client->request('GET', $val, [
-                    'headers'        => [
+                    'headers'       => [
                         'Accept-Encoding' => 'gzip',
                         'User-Agent'      => $config['ua'],
                     ],
-                    'cookies'        => $jar,
+                    'cookies'       => $jar,
+                    'proxy'         => 'socks5://127.0.0.1:9050',
+                    'timeout'       => 15,
                 ]);
                 if ($res->getStatusCode() !== 200) {
                     echo $res->getStatusCode() . ' 失敗: ' . $url['name'] . $val . PHP_EOL;
