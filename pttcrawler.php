@@ -32,7 +32,10 @@ foreach ($config['urls'] as $url) {
             'User-Agent'      => $config['ua'],
         ],
         'cookies'       => $jar,
-        'proxy'         => 'socks5://127.0.0.1:9050',
+        'proxy'         => '127.0.0.1:9050',
+        'curl'          => [
+            CURLOPT_PROXYTYPE   => CURLPROXY_SOCKS5_HOSTNAME,
+        ],
         'timeout'       => 15,
     ]);
     if ($res->getStatusCode() !== 200) {
@@ -82,7 +85,10 @@ foreach ($config['urls'] as $url) {
                         'User-Agent'      => $config['ua'],
                     ],
                     'cookies'       => $jar,
-                    'proxy'         => 'socks5://127.0.0.1:9050',
+                    'proxy'         => '127.0.0.1:9050',
+                    'curl'          => [
+                        CURLOPT_PROXYTYPE   => CURLPROXY_SOCKS5_HOSTNAME,
+                    ],
                     'timeout'       => 15,
                 ]);
                 if ($res->getStatusCode() !== 200) {
