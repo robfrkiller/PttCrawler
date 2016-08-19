@@ -26,6 +26,7 @@ $jar->setCookie($cookie);
 
 $table = $bullet = '';
 foreach ($config['urls'] as $url) {
+    sleep(3);
 
     $res = $client->request('GET', $url['link'], [
         'headers'       => [
