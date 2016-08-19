@@ -28,6 +28,10 @@ return [
                 ]
             ],
             'authorization' => 'AUTHORIZATION'
-        ]
+        ],
+        'slack' => [
+            'token'     => 'TOKEN',
+            'channel'   => 'CHANNEL',
+        ],
     ]
 ];

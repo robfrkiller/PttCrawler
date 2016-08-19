@@ -5,7 +5,8 @@ $config = require 'config.php';
 $client = new GuzzleHttp\Client();
 
 use Sunra\PhpSimple\HtmlDomParser;
-echo '執行時間：' . date('Y-m-d H:i:s') . PHP_EOL;
+$nowTime = date('Y-m-d H:i:s');
+echo '執行時間：' . $nowTime . PHP_EOL;
 
 // 濾掉已經通知過的文章
 if (is_file($config['blocklist_txt'])) {
@@ -135,7 +136,7 @@ foreach ($config['urls'] as $url) {
                         <td><a href="https://www.ptt.cc' . $b['href'] . '" target="_blank">link</a></td>
                         <td>' . $b['title'] . '</td>
                     </tr>';
-            $bullet .= $b['title'] . '\r\n' . 'https://www.ptt.cc' . $b['href'] . '\r\n';
+            $bullet .= $b['title'] . "\n" . 'https://www.ptt.cc' . $b['href'] . "\n";
         }
         $table .= '</table><br>' . PHP_EOL;
     }
@@ -172,6 +173,27 @@ if ($table !== '') {
             echo '寄送失敗，原因：' . $mail->ErrorInfo;
         }
         echo PHP_EOL;
+    }
+    $bullet .= '**** ' . $nowTime . ' ****' . PHP_EOL;
+
+    // slack api
+    $client = new GuzzleHttp\Client();
+    $req = $client->get('https://slack.com/api/chat.postMessage', [
+        'headers'   => [
+            'Content-type'  => 'application/json',
+            'User-Agent'    => $config['ua'],
+        ],
+        'query' => [
+            'token'     => $config['notify']['slack']['token'],
+            'channel'   => $config['notify']['slack']['channel'],
+            'text'      => $bullet,
+        ]
+    ]);
+    if ($req->getStatusCode() === 200) {
+        $res = json_decode((string) $req->getBody(), 1);
+        if ($res['ok'] === true) {
+            echo 'slack push done.' . PHP_EOL;
+        }
     }
 
     //pushbullet api
