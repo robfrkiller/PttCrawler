@@ -187,32 +187,6 @@ if ($table !== '') {
             echo 'slack push done.' . PHP_EOL;
         }
     }
-
-    //pushbullet api
-    $client = new GuzzleHttp\Client();
-    foreach ($config['notify']['pushbullet']['device'] as $push) {
-        $req = $client->post('https://api.pushbullet.com/v2/pushes', [
-            'headers'   => [
-                'Authorization' => $config['notify']['pushbullet']['authorization'],
-                'Content-type'  => 'application/json',
-                'User-Agent'    => $config['ua'],
-            ],
-            'body'      => '
-                {
-                    "device_iden": "' . $push['iden'] . '",
-                    "type": "note",
-                    "title": "PTT crawler",
-                    "body": "' . $bullet . '"
-                }'
-        ]);
-        if ($req->getStatusCode() === 200) {
-            $body = $req->getBody();
-            $res = json_decode($body->read(9999), 1);
-            if ($res['active'] === true) {
-                echo $push['name'] . ' push done.' . PHP_EOL;
-            }
-        }
-    }
 }
 
 $pg_etime = microtime(true);

@@ -20,15 +20,6 @@ return [
         'email' => [
             'YOUREMAIL',
         ],
-        'pushbullet' => [
-            'device'    => [
-                [
-                    'name'  => 'DEVICE_NAME',
-                    'iden'  => 'DEVICE_IDEN'
-                ]
-            ],
-            'authorization' => 'AUTHORIZATION'
-        ],
         'slack' => [
             'token'     => 'TOKEN',
             'channel'   => 'CHANNEL',
