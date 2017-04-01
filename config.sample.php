@@ -24,5 +24,8 @@ return [
             'token'     => 'TOKEN',
             'channel'   => 'CHANNEL',
         ],
+        'line-notify'   => [
+            'LINE-NOTIFY-TOKEN',
+        ],
     ]
 ];

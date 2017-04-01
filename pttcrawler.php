@@ -167,25 +167,45 @@ if ($table !== '') {
         }
         echo PHP_EOL;
     }
-    $bullet .= '**** ' . $nowTime . ' ****' . PHP_EOL;
 
     // slack api
     $client = new GuzzleHttp\Client();
-    $req = $client->get('https://slack.com/api/chat.postMessage', [
-        'headers'   => [
-            'Content-type'  => 'application/json',
-            'User-Agent'    => $config['ua'],
-        ],
-        'query' => [
-            'token'     => $config['notify']['slack']['token'],
-            'channel'   => $config['notify']['slack']['channel'],
-            'text'      => $bullet,
-        ]
-    ]);
-    if ($req->getStatusCode() === 200) {
-        $res = json_decode((string) $req->getBody(), 1);
-        if ($res['ok'] === true) {
-            echo 'slack push done.' . PHP_EOL;
+    if (isset($config['notify']['slack']['token']{0})) {
+        $req = $client->get('https://slack.com/api/chat.postMessage', [
+            'headers'   => [
+                'Content-type'  => 'application/json',
+                'User-Agent'    => $config['ua'],
+            ],
+            'query' => [
+                'token'     => $config['notify']['slack']['token'],
+                'channel'   => $config['notify']['slack']['channel'],
+                'text'      => $bullet,
+            ]
+        ]);
+        if ($req->getStatusCode() === 200) {
+            $res = json_decode((string) $req->getBody(), 1);
+            if ($res['ok'] === true) {
+                echo 'slack push done.' . PHP_EOL;
+            }
+        }
+    }
+
+    foreach ($config['notify']['line-notify'] as $lineToken) {
+        $req = $client->post('https://notify-api.line.me/api/notify', [
+            'headers'   => [
+                'Content-type'  => 'application/x-www-form-urlencoded',
+                'Authorization' => 'Bearer ' . $lineToken,
+                'User-Agent'    => $config['ua'],
+            ],
+            'query' => [
+                'message'       => $bullet,
+            ]
+        ]);
+        if ($req->getStatusCode() === 200) {
+            $res = json_decode((string) $req->getBody(), 1);
+            if ($res['status'] === 200) {
+                echo 'line push done.' . PHP_EOL;
+            }
         }
     }
 }
